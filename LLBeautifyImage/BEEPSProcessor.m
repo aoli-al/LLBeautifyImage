@@ -104,6 +104,7 @@
 -(double *)BEEPSProcessingProgressive {
     double rho = 1.0 + _spatialContraDecay;
     double c = -0.5 / (_photometricStandardDeviation * _photometricStandardDeviation);
+//    double c = M_PI / (2.0 * _photometricStandardDeviation);
     double * data = (double *) malloc(_length * sizeof(double));
     memcpy(data, _data, _length * sizeof(double));
     
@@ -114,6 +115,7 @@
         mu = data[k] - rho * data[k - 1];
         mu = _spatialContraDecay * exp(c * mu * mu);
         data[k] = data[k - 1] * mu + data[k] * (1.0 - mu) / rho;
+//        mu = _spatialContraDecay / cosh(c * (data[k] - rho * data[k-1]));
     }
     return data;
 }
@@ -121,6 +123,7 @@
 -(double *)BEEPSProcessingRegressive {
     double rho = 1.0 + _spatialContraDecay;
     double c = -0.5 / (_photometricStandardDeviation * _photometricStandardDeviation);
+//    double c = M_PI / (2.0 * _photometricStandardDeviation);
     double * data = (double *) malloc(_length * sizeof(double));
     memcpy(data, _data, _length * sizeof(double));
     
@@ -131,6 +134,7 @@
     for (int k = _length - 2; (0 <= k); k--) {
         mu = data[k] - rho * data[k + 1];
         mu = _spatialContraDecay * exp(c * mu * mu);
+//        mu = _spatialContraDecay / cosh(c * (data[k] - rho * data[k + 1]));
         data[k] = data[k + 1] * mu + data[k] * (1.0 - mu) / rho;
     }
     return data;

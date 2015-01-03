@@ -30,14 +30,12 @@
     return self;
 }
 
--(UIImage *)imageProcessingWithDeviation:(int) diviation spatial:(int) spatial {
+-(UIImage *)imageProcessingWithDeviation:(double) diviation spatial:(double) spatial {
     CGImageRef imageRef = [_image CGImage];
     NSUInteger width = CGImageGetWidth(imageRef);
     NSUInteger height = CGImageGetHeight(imageRef);
-    float a = 10.0;
-    float b = 0.0100;
-    a = diviation;
-    b = spatial;
+    double a = diviation;
+    double b = spatial;
     
     UInt32 * data = [self imageRefToBitmap:imageRef];
     double ** horizontalResult1 = (double **) malloc(height * sizeof(double*));
@@ -72,8 +70,6 @@
     
     count = 0;
     
-    NSLog(@"%lf %lf", verticalResult1[191][243], horizontalResult2[243][191]);
-    NSLog(@"%u", data[243 * width + 191]);
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             data[count ++] = (UInt32) ((verticalResult1[j][i]/2 + horizontalResult2[i][j]/2));

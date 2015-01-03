@@ -14,6 +14,6 @@
 @property (retain, nonatomic) UIImage * image;
 
 -(instancetype)initWithImage:(UIImage *) image;
--(UIImage *)imageProcessingWithDeviation:(int) diviation spatial:(int) spatial;
+-(UIImage *)imageProcessingWithDeviation:(double) diviation spatial:(double) spatial;
 
 @end

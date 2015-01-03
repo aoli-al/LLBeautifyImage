@@ -36,10 +36,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UIImage * image = [UIImage imageNamed:@"test.png"];
+    UIImage * image = [UIImage imageNamed:@"test.jpg"];
+    UIImage * image2 = [UIImage imageNamed:@"test.png"];
     _manager = [[BeautifyImage alloc] initWithImage:image];
     
-    UIImage * new = [_manager imageProcessingWithDeviation:10.0 spatial:0.02];
+    UIImage * new = [_manager imageProcessingWithDeviation:1.0 spatial:0.02];
     
     [_imageView setImage:new];
     _imageView.frame = self.view.frame;
@@ -47,7 +48,7 @@
     _slider.frame = CGRectMake(30, 30, 300, 60);
     _slider.value = 1;
     _slider.minimumValue = 0;
-    _slider.maximumValue = 100;
+    _slider.maximumValue = 10000;
     [_slider addTarget:self action:@selector(getValue1:) forControlEvents:UIControlEventValueChanged];
     
     
