@@ -1,0 +1,10 @@
+*.png
+*.jpeg
+*.jpg
+
+
+# Xcode
+.DS_Store
+
+# Vim
+*.swp

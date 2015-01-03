@@ -10,6 +10,10 @@
 
 @interface ViewController : UIViewController
 
+@property (strong, nonatomic) UIImageView * imageView;
+
+- (void)getValue1:(id)sender;
+- (void)getValue2:(id)sender;
 
 @end
 

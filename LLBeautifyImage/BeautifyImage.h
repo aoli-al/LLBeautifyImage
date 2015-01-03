@@ -14,7 +14,6 @@
 @property (retain, nonatomic) UIImage * image;
 
 -(instancetype)initWithImage:(UIImage *) image;
--(void)imageProcessing;
--(UInt32 *) imageBitMapRGBA8:(CGImageRef) imageRef;
+-(UIImage *)imageProcessingWithDeviation:(int) diviation spatial:(int) spatial;
 
 @end
