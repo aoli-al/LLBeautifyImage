@@ -23,7 +23,7 @@
                            height:(int)height
      photometricStandardDeviation:(double)photometricStandardDeviation
                spatialContraDecay:(double)spatialContraDecay
-                       UInt32Data:(UInt32 *)data
+                       UInt32Data:(char *)data
                         direction:(BEEPSProcessDirection)direction{
     self = [super init];
     if (self) {
@@ -34,15 +34,16 @@
                 _length = height;
                 _data = (double *)malloc(_length * sizeof(double));
                 int count = 0;
-                for (int i = startIndex, I = startIndex + _length * width; i < I; i += width) {
+                for (int i = startIndex, I = startIndex + _length * width * 4; i < I; i += width * 4) {
                     _data[count ++] = (double) data[i];
                 }
                 break;
             case kBEEPSProcessDirectionFromLeftToRight:
                 _length = width;
                 _data = (double *) malloc(_length * sizeof(double));
-                for (int i = startIndex, I = startIndex + _length; i < I; i++) {
-                    _data[i - startIndex] = (double) data[i];
+                count = 0;
+                for (int i = startIndex, I = startIndex + _length * 4; i < I; i += 4) {
+                    _data[count ++] = (double) data[i];
                 }
             default:
                 break;
@@ -68,15 +69,17 @@
             case kBEEPSProcessDirectionFromUpToDown:
                 _length = height;
                 _data = (double *)malloc(_length * sizeof(double));
-                for (int i = 0, I = _length; i < I; i ++) {
-                    _data[i] = data[i][startIndex];
+                int count = 0;
+                for (int i = 0, I = _length * 4; i < I; i += 4) {
+                    _data[count ++] = data[i + startIndex % 4][startIndex / 4];
                 }
                 break;
             case kBEEPSProcessDirectionFromLeftToRight:
                 _length = width;
+                count = 0;
                 _data = (double *) malloc(_length * sizeof(double));
-                for (int i = 0, I = _length; i < I; i ++) {
-                    _data[i] = data[i][startIndex];
+                for (int i = 0, I = _length * 4; i < I; i += 4) {
+                    _data[count ++] = data[i + startIndex % 4][startIndex / 4];
                 }
             default:
                 break;

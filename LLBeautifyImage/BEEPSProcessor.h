@@ -25,7 +25,7 @@ typedef NS_ENUM(NSUInteger, BEEPSProcessDirection) {
                             height:(int) height
       photometricStandardDeviation:(double) photometricStandardDeviation
                 spatialContraDecay:(double) spatialContraDecay
-                        UInt32Data:(UInt32 *) data
+                        UInt32Data:(char *) data
                          direction:(BEEPSProcessDirection) direction;
 
 - (instancetype)initWithStartIndex:(int) startIndex

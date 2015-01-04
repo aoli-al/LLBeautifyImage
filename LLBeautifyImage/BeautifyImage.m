@@ -11,8 +11,8 @@
 
 @interface BeautifyImage()
 
--(UInt32 *)imageRefToBitmap:(CGImageRef)imageRef;
--(UIImage *)bitmapToImage:(UInt32 *) data
+-(char *)imageRefToBitmap:(CGImageRef)imageRef;
+-(UIImage *)bitmapToImage:(char *) data
                     width:(int) width
                    height:(int) height;
 
@@ -37,42 +37,44 @@
     double a = diviation;
     double b = spatial;
     
-    UInt32 * data = [self imageRefToBitmap:imageRef];
-    double ** horizontalResult1 = (double **) malloc(height * sizeof(double*));
+    char * data = [self imageRefToBitmap:imageRef];
+    double ** horizontalResult1 = (double **) malloc(height * sizeof(double*) * 4);
     
     int count = 0;
-    for (int i = 0, I = (int) (height * width); i < I; i += width) {
-        BEEPSProcessor * processor = [[BEEPSProcessor alloc] initWithStartIndex:i width:(int) width height:(int) height photometricStandardDeviation:a spatialContraDecay:b UInt32Data:data direction:kBEEPSProcessDirectionFromLeftToRight];
-        horizontalResult1[count ++] = processor.calculcate;
+    for (int i = 0, I = (int) (height * width * 4); i < I; i += width * 4) {
+        for (int j = 0; j < 4; j++) {
+            BEEPSProcessor * processor = [[BEEPSProcessor alloc] initWithStartIndex:i+j width:(int) width height:(int) height photometricStandardDeviation:a spatialContraDecay:b UInt32Data:data direction:kBEEPSProcessDirectionFromLeftToRight];
+            horizontalResult1[count ++] = processor.calculcate;
+        }
     }
     
-    double ** verticalResult1 = (double **) malloc(width * sizeof(double *));
+    double ** verticalResult1 = (double **) malloc(width * sizeof(double *) * 4);
     
-    for (int i = 0, I = (int) width; i < I; i++) {
-        BEEPSProcessor * processor = [[BEEPSProcessor alloc] initWithStartIndex:i width:(int) width height:(int) height photometricStandardDeviation:a spatialContraDecay:b doubleData:horizontalResult1 direction:kBEEPSProcessDirectionFromUpToDown];
-        verticalResult1[i] = processor.calculcate;
+    for (int i = 0, I = (int) width * 4; i < I; i++) {
+            BEEPSProcessor * processor = [[BEEPSProcessor alloc] initWithStartIndex:i width:(int) width height:(int) height photometricStandardDeviation:a spatialContraDecay:b doubleData:horizontalResult1 direction:kBEEPSProcessDirectionFromUpToDown];
+            verticalResult1[i] = processor.calculcate;
     }
     
     
-    double ** verticalResult2 = (double **)malloc(width * sizeof(double *));
-    for (int i = 0, I = (int) width; i < I; i++) {
+    double ** verticalResult2 = (double **)malloc(width * sizeof(double *) * 4);
+    for (int i = 0, I = (int) width * 4; i < I; i++) {
         BEEPSProcessor * processor = [[BEEPSProcessor alloc] initWithStartIndex:i width:(int) width height:(int) height photometricStandardDeviation:a spatialContraDecay:b UInt32Data:data direction:kBEEPSProcessDirectionFromUpToDown];
         verticalResult2[i] = processor.calculcate;
     }
     
-    double ** horizontalResult2 = (double **)malloc(height * sizeof(double *));
+    double ** horizontalResult2 = (double **)malloc(height * sizeof(double *) * 4);
     
     count = 0;
-    for (int i = 0, I = (int) (height); i < I; i ++) {
-        BEEPSProcessor * processor = [[BEEPSProcessor alloc] initWithStartIndex:i width:(int) width height:(int) height photometricStandardDeviation:a spatialContraDecay:b doubleData:verticalResult2 direction:kBEEPSProcessDirectionFromLeftToRight];
-        horizontalResult2[i] = processor.calculcate;
+    for (int i = 0, I = (int) (height * 4); i < I; i ++) {
+            BEEPSProcessor * processor = [[BEEPSProcessor alloc] initWithStartIndex:i width:(int) width height:(int) height photometricStandardDeviation:a spatialContraDecay:b doubleData:verticalResult2 direction:kBEEPSProcessDirectionFromLeftToRight];
+            horizontalResult2[i] = processor.calculcate;
     }
     
     count = 0;
     
     for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            data[count ++] = (UInt32) ((verticalResult1[j][i]/2 + horizontalResult2[i][j]/2));
+        for (int j = 0; j < width * 4; j++) {
+            data[count ++] = (char) ((verticalResult1[j][i]/2 + horizontalResult2[i * 4 + j % 4][j / 4]/2));
         }
     }
     
@@ -80,11 +82,11 @@
     
     // TODO: ADD DESTRUCTOR
     free(data);
-    for (int i = 0; i < height; i++) {
+    for (int i = 0; i < height * 4; i++) {
         free(horizontalResult1[i]);
         free(horizontalResult2[i]);
     }
-    for (int i = 0; i < width; i++) {
+    for (int i = 0; i < width * 4; i++) {
         free(verticalResult1[i]);
         free(verticalResult2[i]);
     }
@@ -96,13 +98,13 @@
     return image;
 }
 
--(UInt32 *)imageRefToBitmap:(CGImageRef)imageRef {
+-(char *)imageRefToBitmap:(CGImageRef)imageRef {
     
     // First get the image into your data buffer
     NSUInteger width = CGImageGetWidth(imageRef);
     NSUInteger height = CGImageGetHeight(imageRef);
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    UInt32 *rawData = (UInt32*) calloc(height * width, sizeof(UInt32));
+    char *rawData = (char *) calloc(height * width * 4, sizeof(char));
     NSUInteger bytesPerPixel = 4;
     NSUInteger bytesPerRow = bytesPerPixel * width;
     NSUInteger bitsPerComponent = 8;
@@ -116,7 +118,7 @@
     return rawData;
 }
 
--(UIImage *)bitmapToImage:(UInt32 *) data
+-(UIImage *)bitmapToImage:(char *) data
                     width:(int) width
                    height:(int) height {
     size_t bufferLength = width * height * 4;
