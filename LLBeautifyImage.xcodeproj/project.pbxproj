@@ -16,6 +16,7 @@
 		B3A3556D1A567ADB007C5C4A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B3A3556C1A567ADB007C5C4A /* Images.xcassets */; };
 		B3A3557C1A567ADB007C5C4A /* LLBeautifyImageTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B3A3557B1A567ADB007C5C4A /* LLBeautifyImageTests.m */; };
 		B3A355871A567B39007C5C4A /* BEEPSProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = B3A355861A567B39007C5C4A /* BEEPSProcessor.m */; };
+		B3AA670C1A5A9BC5004729C9 /* ImageUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = B3AA670B1A5A9BC5004729C9 /* ImageUtilities.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,8 @@
 		B3A3557B1A567ADB007C5C4A /* LLBeautifyImageTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLBeautifyImageTests.m; sourceTree = "<group>"; };
 		B3A355851A567B39007C5C4A /* BEEPSProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEEPSProcessor.h; sourceTree = "<group>"; };
 		B3A355861A567B39007C5C4A /* BEEPSProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEEPSProcessor.m; sourceTree = "<group>"; };
+		B3AA670A1A5A9BC5004729C9 /* ImageUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUtilities.h; sourceTree = "<group>"; };
+		B3AA670B1A5A9BC5004729C9 /* ImageUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUtilities.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +94,8 @@
 				B3A355641A567ADB007C5C4A /* AppDelegate.m */,
 				B389E17D1A568E37000A487B /* BeautifyImage.h */,
 				B389E17E1A568E37000A487B /* BeautifyImage.m */,
+				B3AA670A1A5A9BC5004729C9 /* ImageUtilities.h */,
+				B3AA670B1A5A9BC5004729C9 /* ImageUtilities.m */,
 				B3A355661A567ADB007C5C4A /* ViewController.h */,
 				B3A355671A567ADB007C5C4A /* ViewController.m */,
 				B3A355851A567B39007C5C4A /* BEEPSProcessor.h */,
@@ -229,6 +234,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B3AA670C1A5A9BC5004729C9 /* ImageUtilities.m in Sources */,
 				B3A355871A567B39007C5C4A /* BEEPSProcessor.m in Sources */,
 				B3A355681A567ADB007C5C4A /* ViewController.m in Sources */,
 				B3A355651A567ADB007C5C4A /* AppDelegate.m in Sources */,

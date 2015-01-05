@@ -8,12 +8,13 @@
 
 #import "ViewController.h"
 #import "BeautifyImage.h"
+#import "ImageUtilities.h"
 
 @interface ViewController ()
 
-@property (retain, nonatomic) BeautifyImage * manager;
 @property (strong, nonatomic) UISlider * slider;
 @property (strong, nonatomic) UISlider * sslider;
+@property (strong, nonatomic) UIImage * image;
 
 @end
 
@@ -36,12 +37,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    UIImage * image = [UIImage imageNamed:@"test.jpg"];
-    _manager = [[BeautifyImage alloc] initWithImage:image];
+    _image = [UIImage imageNamed:@"test.jpg"];
+    _image = [ImageUtilities imageWithImage:_image scaleToSize:CGSizeMake(300, 300)];
     
-    UIImage * new = [_manager imageProcessingWithDeviation:40.0 spatial:0.65];
-    
-    [_imageView setImage:new];
+    [_imageView setImage:_image];
     _imageView.frame = self.view.frame;
     
     _slider.frame = CGRectMake(30, 30, 300, 60);
@@ -63,27 +62,19 @@
 }
 
 - (void)getValue1:(id)sender {
-    static bool flag = false;
-    dispatch_queue_t backgroundQueue = dispatch_queue_create("com.pic.leo", NULL);
-    if (! flag) {
-        dispatch_async(backgroundQueue, ^{
-            flag = true;
-            UIImage * new = [_manager imageProcessingWithDeviation:_slider.value spatial:_sslider.value];
+    static bool finished = YES;
+    if (finished) {
+        finished = NO;
+        [BeautifyImage imageProcessing:_image diviation:_slider.value spatial:_sslider.value callback:^(UIImage * image) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                flag = false;
-                [_imageView setImage:new];
+                finished = YES;
+                [_imageView setImage:image];
                 [_imageView setNeedsDisplay];
             });
-        });
+        }];
     }
 }
 
-- (void)getValue2:(id)sender {
-    UISlider * slider = (UISlider *) sender;
-    UIImage * new = [_manager imageProcessingWithDeviation:_slider.value spatial:slider.value];
-    [_imageView setImage:new];
-    
-}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

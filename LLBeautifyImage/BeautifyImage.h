@@ -11,9 +11,6 @@
 
 @interface BeautifyImage : NSObject
 
-@property (retain, nonatomic) UIImage * image;
-
--(instancetype)initWithImage:(UIImage *) image;
--(UIImage *)imageProcessingWithDeviation:(double) diviation spatial:(double) spatial;
++(void)imageProcessing:(UIImage *) image diviation:(double) diviation spatial:(double) spatial callback:(void (^)(UIImage *))callback;
 
 @end

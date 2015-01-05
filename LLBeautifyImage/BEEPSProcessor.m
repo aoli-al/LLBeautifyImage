@@ -40,6 +40,7 @@
                 break;
             case kBEEPSProcessDirectionFromLeftToRight:
                 _length = width;
+                startIndex = startIndex % 4 + (startIndex / 4) * 4 * width;
                 _data = (double *) malloc(_length * sizeof(double));
                 count = 0;
                 for (int i = startIndex, I = startIndex + _length * 4; i < I; i += 4) {
