@@ -37,7 +37,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _image = [UIImage imageNamed:@"test.jpg"];
+    _image = [UIImage imageNamed:@"test.png"];
     _image = [ImageUtilities imageWithImage:_image scaleToSize:CGSizeMake(300, 300)];
     
     [_imageView setImage:_image];

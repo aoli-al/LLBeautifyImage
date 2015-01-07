@@ -25,9 +25,9 @@
     __block double ** horizontalResult2 = (double **)malloc(height * sizeof(double *) * 4);
     
     __block dispatch_group_t processingGroup = dispatch_group_create();
-    dispatch_queue_t queue = dispatch_queue_create("com.biu.imageprocessing.queue", NULL);
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     
-    dispatch_async(queue, ^{
+    dispatch_group_async(processingGroup, queue, ^{
         dispatch_group_enter(processingGroup);
         
         NSLog(@"enter1");
@@ -46,7 +46,7 @@
         dispatch_group_leave(processingGroup);
     });
     
-    dispatch_async(queue, ^{
+    dispatch_group_async(processingGroup, queue, ^{
         dispatch_group_enter(processingGroup);
         
         NSLog(@"enter2");

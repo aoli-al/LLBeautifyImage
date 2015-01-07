@@ -145,10 +145,33 @@
 }
 
 -(double *)calculcate {
-    double * r = [self BEEPSProcessingRegressive];
-    double * p = [self BEEPSProcessingProgressive];
-    double * g = [self BEEPSGain];
     
+    dispatch_group_t BEEPGroup = dispatch_group_create();
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    __block double * r;
+    __block double * p;
+    __block double * g;
+    
+    dispatch_group_async(BEEPGroup, queue, ^{
+        dispatch_group_enter(BEEPGroup);
+        r = [self BEEPSProcessingRegressive];
+        dispatch_group_leave(BEEPGroup);
+    });
+    
+    dispatch_group_async(BEEPGroup, queue, ^{
+        dispatch_group_enter(BEEPGroup);
+        p = [self BEEPSProcessingProgressive];
+        dispatch_group_leave(BEEPGroup);
+    });
+    
+    dispatch_group_async(BEEPGroup, queue, ^{
+        dispatch_group_enter(BEEPGroup);
+        g = [self BEEPSGain];
+        dispatch_group_leave(BEEPGroup);
+    });
+    
+    
+    dispatch_group_wait(BEEPGroup, DISPATCH_TIME_FOREVER);
     
     for (int i = 0; i < _length; i++) {
         r[i] += p[i] - g[i];
