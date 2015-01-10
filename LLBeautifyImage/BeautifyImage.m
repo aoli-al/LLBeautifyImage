@@ -23,9 +23,11 @@
     __block double ** verticalResult1 = (double **) malloc(width * sizeof(double *) * 4);
     __block double ** verticalResult2 = (double **)malloc(width * sizeof(double *) * 4);
     __block double ** horizontalResult2 = (double **)malloc(height * sizeof(double *) * 4);
+
+    __block NSDate * start = [NSDate date];
     
     __block dispatch_group_t processingGroup = dispatch_group_create();
-    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     
     dispatch_group_async(processingGroup, queue, ^{
         dispatch_group_enter(processingGroup);
@@ -42,14 +44,12 @@
             verticalResult1[i] = processor.calculcate;
         });
         
-        NSLog(@"donw");
         dispatch_group_leave(processingGroup);
     });
     
     dispatch_group_async(processingGroup, queue, ^{
         dispatch_group_enter(processingGroup);
         
-        NSLog(@"enter2");
         dispatch_queue_t globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
         dispatch_apply(width * 4, globalQueue, ^(size_t i) {
             BEEPSProcessor * processor = [[BEEPSProcessor alloc] initWithStartIndex:(int) i width:(int) width height:(int) height photometricStandardDeviation:diviation spatialContraDecay:spatial UInt32Data:data direction:kBEEPSProcessDirectionFromUpToDown];
@@ -75,7 +75,11 @@
         });
         
         UIImage * processedImage = [ImageUtilities bitmapToImage:data width:(int) width height:(int) height];
+        
         callback(processedImage);
+        NSDate * methodFinish = [NSDate date];
+        NSTimeInterval executionTime = [methodFinish timeIntervalSinceDate:start];
+        NSLog(@"E:%f", executionTime);
         
         dispatch_async(globalQueue, ^{
             free(data);
